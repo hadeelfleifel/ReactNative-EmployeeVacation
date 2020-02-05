@@ -1,3 +1,5 @@
+//Communication between native and React Native
+//To define a React component class, you need to extend React.Component
 import React, { Component } from "react";
 import {
   StyleSheet,
@@ -8,11 +10,19 @@ import {
 } from "react-native";
 import CalendarPicker from "react-native-calendar-picker";
 
+//Classes support prototype-based inheritance, super calls, instance and static methods and constructors
+//To define a React component class, you need to extend React.Component
 class Add extends Component {
+  //when an instance of a component is being created and inserted into the DOM:
+  // called before it is mounted
+      //constructor to set default state
+//Initializing local state by assigning an object to this.state.
+//Binding event handler methods to an instance.
   constructor(props) {
-    //constructor to set default state
+    //you should call super(props) before any other statement. 
+    //Otherwise, this.props will be undefined in the constructor, which can lead to bugs.
     super(props);
-
+//global function 
     this.state = {
       name: "",
       code: "",
@@ -21,7 +31,9 @@ class Add extends Component {
       selectedStartDate: null,
       selectedEndDate: null
     };
-
+//this => actually refers to the originating context. That’s called Lexical Scoping if you’re into naming things
+//using bind to create a function (supplied as a callback) 
+//if i have arrow function not need uo use this 
     this.onDateChange = this.onDateChange.bind(this);
   }
 
@@ -39,6 +51,9 @@ class Add extends Component {
     }
   }
 
+  //The only method you must define in a React.Component subclass is called render()
+              //setState() enqueues changes to the component state and 
+            //tells React that this component and its children need to be re-rendered with the updated state.
   render() {
     const { selectedStartDate, selectedEndDate } = this.state;
     const minDate = new Date(2018, 1, 1); // Min date
@@ -46,34 +61,37 @@ class Add extends Component {
     const startDate = selectedStartDate ? selectedStartDate.toString() : ""; //Start date
     const endDate = selectedEndDate ? selectedEndDate.toString() : ""; //End date
     const { navigate } = this.props.navigation;
+//this.props.navigation: the navigation prop is passed in to every screen component
+// (definition) in stack navigator (more about this later in "The navigation prop in depth").
+//navigate('Details'): we call the navigate function (on the navigation prop — naming is hard!)
+// with the name of the route that we'd like to move the user to.
 
+//he navigate function roughly means "go to this screen",
     return (
+      // to return multiple elements
       <>
         <View style={styles.container}>
           <Text>Employee Name</Text>
           <TextInput
           editable
             placeholder="Enter your Name Here"
-            underlineColorAndroid="transparent"
             onChangeText={name => this.setState({ name })}
-            required={true}
+
           />
+          
 
           <Text>Employee Code</Text>
           <TextInput
           editable
             placeholder="EX: 152 -156"
-            underlineColorAndroid="transparent"
             onChangeText={code => this.setState({ code })}
           />
 
           <Text>Employee Location</Text>
           <TextInput
-          editable
             placeholder="EX: Jordan -Amman"
             multiline={true}
             numberOfLines={4}
-            underlineColorAndroid="transparent"
             onChangeText={location => this.setState({ location })}
           />
 
@@ -81,7 +99,6 @@ class Add extends Component {
           <TextInput
           editable
             placeholder="EX: 2 week's "
-            underlineColorAndroid="transparent"
             onChangeText={days => this.setState({ days })}
           />
 
